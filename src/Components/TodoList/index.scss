@@ -77,6 +77,16 @@
 
           .task-container {
             font-size: 20px;
+
+            input {
+              color: red;
+            }
+
+            input:disabled {
+              color: unset;
+              background-color: transparent;
+              border: 2px solid transparent;
+            }
           }
 
           .right-control-container {
@@ -100,15 +110,21 @@
                 }
               }
 
+              .check-icon {
+                &:hover {
+                  background-color: rgb(54, 148, 0);
+                }
+              }
+
               .edit-icon {
                 &:hover {
-                  background-color: rgb(255, 255, 192);
+                  background-color: rgb(255, 255, 0);
                 }
               }
 
               .del-icon {
                 &:hover {
-                  background-color: #ff8383;
+                  background-color: #ff3131;
                 }
               }
             }

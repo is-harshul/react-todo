@@ -4,6 +4,7 @@ import "./index.scss";
 import AddTaskModal from '../AddTaskModal/AddTaskModal';
 import newId from '../utils/newId';
 
+import Check from "../../Assets/check.svg";
 import Delete from "../../Assets/delete.svg";
 import Edit from "../../Assets/edit.svg";
 import EditTaskModal from '../EditTaskModal/EditTaskModal';
@@ -11,27 +12,30 @@ import EditTaskModal from '../EditTaskModal/EditTaskModal';
 const LIST = [
   {
     id: 1,
-    task: "Bring eggs"
+    task: "Bring eggs",
+    editOpen: false,
   },
   {
     id: 2,
-    task: "Fetch milk"
+    task: "Fetch milk",
+    editOpen: false,
   },
   {
     id: 3,
-    task: "Learn JS"
+    task: "Learn JS",
+    editOpen: false,
+
   },
   {
     id: 4,
-    task: "Learn React"
+    task: "Learn React",
+    editOpen: false,
   },
 ]
 
 export default function TodoList() {
   const [todo, setTodo] = useState(LIST);
-  const [currentTask, setCurrentTask] = useState(null);
   const [isAddTaskModalOpen, setAddTaskModalVisible] = useState(false);
-  const [isEditTaskModalOpen, setEditTaskModalVisible] = useState(false);
 
   const addNewTask = (task) => {
     const id = newId();
@@ -39,27 +43,44 @@ export default function TodoList() {
     setTodo(() => [...todo, taskObject]);
   };
 
-  const editTask = (updatedTask) => {
-    console.log(updatedTask);
-    const taskListWithoutTask = todo.map(item => {
-      if (item.id === updatedTask.id) {
-        return { id: item.id, task: updatedTask.task }
-      }
-      return item;
-    });
-    setTodo(() => [...taskListWithoutTask]);
-  };
-
   const handleEdit = (e, clickedTask) => {
     console.log(clickedTask);
-    setCurrentTask(clickedTask);
-    setEditTaskModalVisible(true);
+    const list = todo.map(item => {
+      if (item.id === clickedTask.id) {
+        return { ...item, editOpen: true };
+      }
+      return item;
+    })
+    setTodo(list);
   };
+
+  const handleEditChange = (e, taskItem) => {
+    const value = e.target.value;
+    console.log(value, taskItem.id);
+    const list = todo.map(item => {
+      if (item.id === taskItem.id) {
+        return { ...item, task: value };
+      }
+      return item;
+    })
+    setTodo(list);
+  }
 
   const handleDelete = (e, id) => {
     console.log(id);
     let tempTodo = todo.filter(item => item.id !== id);
     setTodo([...tempTodo]);
+  };
+
+  const handleSave = (e, clickedTask) => {
+    clickedTask.editOpen = true;
+    const list = todo.map(item => {
+      if (item.id === clickedTask.id) {
+        return { ...item, editOpen: false };
+      }
+      return item;
+    })
+    setTodo(list)
   };
 
   const handleAddTaskBtnClick = () => {
@@ -86,11 +107,16 @@ export default function TodoList() {
               <li className="list-item-container" key={taskItem.id} index={i}>
                 <div className="inner-li">
                   <div className="task-container">
-                    {taskItem.task}
+                    <input value={taskItem.task} disabled={!taskItem.editOpen} onChange={(e) => handleEditChange(e, taskItem)} />
                   </div>
                   <div className="right-control-container">
                     <div className="li-controls">
-                      <img src={Edit} alt="edit" className="edit-icon action-icon" onClick={(e) => handleEdit(e, taskItem)} />
+                      {
+                        taskItem.editOpen ?
+                          <img src={Check} alt="check" className="check-icon action-icon" onClick={(e) => handleSave(e, taskItem)} />
+                          :
+                          <img src={Edit} alt="edit" className="edit-icon action-icon" onClick={(e) => handleEdit(e, taskItem)} />
+                      }
                       <img src={Delete} alt="delete" className="del-icon action-icon" onClick={(e) => handleDelete(e, taskItem.id)} />
                     </div>
                   </div>
@@ -106,7 +132,6 @@ export default function TodoList() {
   return (
     <div className="task-list-head-wrapper">
       {renderHead()}
-      {isEditTaskModalOpen && <EditTaskModal editTask={editTask} currentTask={currentTask} hideModal={() => setEditTaskModalVisible(false)} />}
       {isAddTaskModalOpen && <AddTaskModal addNewTask={addNewTask} hideModal={() => setAddTaskModalVisible(false)} />}
       {renderTodo()}
     </div>
