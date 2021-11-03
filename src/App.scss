@@ -1,0 +1,18 @@
+.App {
+  font-family: 'Open Sans', sans-serif;
+  min-height: 100vh;
+
+  .app-header {
+    display: flex;
+    background-color: #444443;
+    justify-content: center;
+
+    h2 {
+      color: aliceblue;
+      font-weight: bolder;
+      margin: 32px 0;
+      user-select: none;
+      font-size: 40px;
+    }
+  }
+}

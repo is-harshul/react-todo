@@ -1,0 +1,18 @@
+.add-task-modal {
+  // width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .add-task-input-field {
+    border: 1px solid grey;
+    border-radius: 5px;
+    outline: none;
+    margin: 12px 0;
+    height: 44px;
+    width: 400px;
+    color: black;
+    font-weight: 450;
+    padding-left: 12px;
+  }
+}
